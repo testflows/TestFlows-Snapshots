@@ -76,15 +76,20 @@ def varname(s):
     return name
 
 
-def write_to_snapshot(fd, name, repr_value):
+def write_to_snapshot(fd, name, repr_value, lock_protected=True):
     """Write entry to snapshot file object."""
     repr_value = repr_value.replace('"""', '""" + \'"""\' + r"""')
 
-    with lock.write():
+    if lock_protected:
+        lock.writer_acquire()
+    try:
         if repr_value.endswith('"'):
             fd.write(f'''{name} = r"""{repr_value[:-1]}""" + '"'\n\n''')
         else:
             fd.write(f'''{name} = r"""{repr_value}"""\n\n''')
+    finally:
+        if lock_protected:
+            lock.writer_release()
 
 
 def rewrite_snapshot(filename):
@@ -103,7 +108,9 @@ def rewrite_snapshot(filename):
             for name in dir(snapshot_module):
                 if name.startswith("__"):
                     continue
-                write_to_snapshot(fd, name, getattr(snapshot_module, name))
+                write_to_snapshot(
+                    fd, name, getattr(snapshot_module, name), lock_protected=False
+                )
 
 
 def snapshot(
