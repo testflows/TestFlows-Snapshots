@@ -17,14 +17,14 @@ import os
 import textwrap
 import hashlib
 import difflib
-import threading
 
 from importlib.machinery import SourceFileLoader
 
 from .errors import SnapshotError as SnapshotErrorBase
+from .parallel import RWLock
 from .mode import *
 
-lock = threading.Lock()
+lock = RWLock()
 
 
 class SnapshotError(SnapshotErrorBase):
@@ -80,7 +80,7 @@ def write_to_snapshot(fd, name, repr_value):
     """Write entry to snapshot file object."""
     repr_value = repr_value.replace('"""', '""" + \'"""\' + r"""')
 
-    with lock:
+    with lock.write():
         if repr_value.endswith('"'):
             fd.write(f'''{name} = r"""{repr_value[:-1]}""" + '"'\n\n''')
         else:
@@ -96,7 +96,7 @@ def rewrite_snapshot(filename):
 
     module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
 
-    with lock:
+    with lock.write():
         snapshot_module = SourceFileLoader(module_name, filename).load_module()
 
         with open(filename, "w") as fd:
@@ -119,15 +119,16 @@ def snapshot(
 
     if os.path.exists(filename):
         module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
-        snapshot_module = SourceFileLoader(module_name, filename).load_module()
+        with lock.read():
+            snapshot_module = SourceFileLoader(module_name, filename).load_module()
 
-        if hasattr(snapshot_module, name):
-            snapshot_value = getattr(snapshot_module, name)
-            if not (snapshot_value == repr_value):
-                if mode & SNAPSHOT_MODE_CHECK:
-                    return SnapshotError(filename, name, snapshot_value, repr_value)
-            else:
-                return True
+            if hasattr(snapshot_module, name):
+                snapshot_value = getattr(snapshot_module, name)
+                if not (snapshot_value == repr_value):
+                    if mode & SNAPSHOT_MODE_CHECK:
+                        return SnapshotError(filename, name, snapshot_value, repr_value)
+                else:
+                    return True
 
     if not (mode & SNAPSHOT_MODE_UPDATE):
         return SnapshotError(filename, name, "", repr_value)
