@@ -14,7 +14,7 @@
     * 5.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Value](#rqtestflowssnapshotsfunctionsnapshotvalue)
 * 6 [The Unique Identifier](#the-unique-identifier)
     * 6.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Id](#rqtestflowssnapshotsfunctionsnapshotid)
-* 7 [Outputing Encoded Value](#outputing-encoded-value)
+* 7 [Outputting Encoded Value](#outputting-encoded-value)
     * 7.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Output](#rqtestflowssnapshotsfunctionsnapshotoutput)
 * 8 [Storage Path](#storage-path)
     * 8.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Path](#rqtestflowssnapshotsfunctionsnapshotpath)
@@ -126,7 +126,7 @@ snapshot("my value", id="1", name="name")
 snapshot("my value", id="2", name="name")
 ```
 
-## Outputing Encoded Value
+## Outputting Encoded Value
 
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Output
 version: 1.0
