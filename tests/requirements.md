@@ -39,12 +39,10 @@
 
 ## Introduction
 
-Snapshot testing is an approach to recording the behavior of software systems and later using the stored behavior
-as the expected results of the tests.
-
-In many cases, the exact behavior might be unknown, the test oracle problem, or hard to determine,
-however changes in behavior between different executions or versions might not be expected and therefore comparing
-behavior between runs, software version, or even different software implementations is often useful. 
+Snapshot testing is an approach to recording the behavior of software systems and later using the stored behavior as the expected results of the tests.
+In many cases, the exact behavior might be unknown, also known as the [test oracle](https://en.wikipedia.org/wiki/Test_oracle) problem, or hard to determine.
+However, changes in behavior between different executions or versions are often not expected, so comparing behavior between runs, software versions, or even other software
+implementations is helpful.
 
 ## Snapshots Module
 
