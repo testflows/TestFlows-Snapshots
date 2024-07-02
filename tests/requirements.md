@@ -3,40 +3,49 @@
 
 ## Table of Contents
 
-* 1 [Snapshots](#snapshots)
-    * 1.1 [RQ.TestFlows.Snapshots](#rqtestflowssnapshots)
-* 2 [Installing and Uninstalling](#installing-and-uninstalling)
-    * 2.1 [RQ.TestFlows.Snapshots.InstallingAndUninstalling](#rqtestflowssnapshotsinstallinganduninstalling)
-* 3 [The snapshot Function](#the-snapshot-function)
-    * 3.1 [RQ.TestFlows.Snapshots.Function.Snapshot](#rqtestflowssnapshotsfunctionsnapshot)
-* 4 [Storing or Comparing Value](#storing-or-comparing-value)
-    * 4.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Value](#rqtestflowssnapshotsfunctionsnapshotvalue)
-* 5 [The Unique Identifier](#the-unique-identifier)
-    * 5.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Id](#rqtestflowssnapshotsfunctionsnapshotid)
-* 6 [Outputing Encoded Value](#outputing-encoded-value)
-    * 6.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Output](#rqtestflowssnapshotsfunctionsnapshotoutput)
-* 7 [Storage Path](#storage-path)
-    * 7.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Path](#rqtestflowssnapshotsfunctionsnapshotpath)
-* 8 [Storing Multiple Values](#storing-multiple-values)
-    * 8.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Name](#rqtestflowssnapshotsfunctionsnapshotname)
-* 9 [Value Encoder](#value-encoder)
-    * 9.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Encoder](#rqtestflowssnapshotsfunctionsnapshotencoder)
-* 10 [Adding Comment](#adding-comment)
-    * 10.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Comment](#rqtestflowssnapshotsfunctionsnapshotcomment)
-* 11 [Operation Modes](#operation-modes)
-    * 11.1 [The CHECK Mode](#the-check-mode)
-        * 11.1.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Mode.CHECK](#rqtestflowssnapshotsfunctionsnapshotmodecheck)
-    * 11.2 [The UPDATE Mode](#the-update-mode)
-        * 11.2.1 [RQ.TestFlows.Snapshots.Function.Modes.UPDATE](#rqtestflowssnapshotsfunctionmodesupdate)
-    * 11.3 [The REWRITE Mode](#the-rewrite-mode)
-        * 11.3.1 [RQ.TestFlows.Snapshots.Function.Modes.REWRITE](#rqtestflowssnapshotsfunctionmodesrewrite)
-* 12 [Storage Formats](#storage-formats)
-    * 12.1 [Python Module File (Version 1)](#python-module-file-version-1)
-        * 12.1.1 [RQ.TestFlows.Snapshots.Version1](#rqtestflowssnapshotsversion1)
-    * 12.2 [JSON Lines File (Version 2)](#json-lines-file-version-2)
-        * 12.2.1 [RQ.TestFlows.Snapshots.Version2](#rqtestflowssnapshotsversion2)
+* 1 [Introduction](#introduction)
+* 2 [Snapshots Module](#snapshots-module)
+    * 2.1 [RQ.TestFlows.Snapshots](#rqtestflowssnapshots)
+* 3 [Installing and Uninstalling](#installing-and-uninstalling)
+    * 3.1 [RQ.TestFlows.Snapshots.InstallingAndUninstalling](#rqtestflowssnapshotsinstallinganduninstalling)
+* 4 [The snapshot Function](#the-snapshot-function)
+    * 4.1 [RQ.TestFlows.Snapshots.Function.Snapshot](#rqtestflowssnapshotsfunctionsnapshot)
+* 5 [Storing or Comparing Value](#storing-or-comparing-value)
+    * 5.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Value](#rqtestflowssnapshotsfunctionsnapshotvalue)
+* 6 [The Unique Identifier](#the-unique-identifier)
+    * 6.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Id](#rqtestflowssnapshotsfunctionsnapshotid)
+* 7 [Outputing Encoded Value](#outputing-encoded-value)
+    * 7.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Output](#rqtestflowssnapshotsfunctionsnapshotoutput)
+* 8 [Storage Path](#storage-path)
+    * 8.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Path](#rqtestflowssnapshotsfunctionsnapshotpath)
+* 9 [Storing Multiple Values](#storing-multiple-values)
+    * 9.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Name](#rqtestflowssnapshotsfunctionsnapshotname)
+* 10 [Value Encoder](#value-encoder)
+    * 10.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Encoder](#rqtestflowssnapshotsfunctionsnapshotencoder)
+* 11 [Adding Comment](#adding-comment)
+    * 11.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Comment](#rqtestflowssnapshotsfunctionsnapshotcomment)
+* 12 [Operation Modes](#operation-modes)
+    * 12.1 [The CHECK Mode](#the-check-mode)
+        * 12.1.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Mode.CHECK](#rqtestflowssnapshotsfunctionsnapshotmodecheck)
+    * 12.2 [The UPDATE Mode](#the-update-mode)
+        * 12.2.1 [RQ.TestFlows.Snapshots.Function.Modes.UPDATE](#rqtestflowssnapshotsfunctionmodesupdate)
+    * 12.3 [The REWRITE Mode](#the-rewrite-mode)
+        * 12.3.1 [RQ.TestFlows.Snapshots.Function.Modes.REWRITE](#rqtestflowssnapshotsfunctionmodesrewrite)
+* 13 [Storage Formats](#storage-formats)
+    * 13.1 [Python Module File (Version 1)](#python-module-file-version-1)
+        * 13.1.1 [RQ.TestFlows.Snapshots.Version1](#rqtestflowssnapshotsversion1)
+    * 13.2 [JSON Lines File (Version 2)](#json-lines-file-version-2)
+        * 13.2.1 [RQ.TestFlows.Snapshots.Version2](#rqtestflowssnapshotsversion2)
 
-## Snapshots
+## Introduction
+
+Snapshot testing is a practical approach to recording the behavior of software systems under test.
+
+In many cases, the exact behavior might be unknown, the test oracle problem, or hard to determine,
+however changes in behavior between different executions or versions might not be expected and therefore comparing
+behavior between runs, software version, or even different software implementations is often useful. 
+
+## Snapshots Module
 
 ### RQ.TestFlows.Snapshots
 version: 1.0
