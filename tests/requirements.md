@@ -1,4 +1,4 @@
-# SRS TestFlows Snapshots
+# SRS TestFlows Snapshots Module
 # Software Requirements Specification
 
 ## Table of Contents
@@ -28,9 +28,9 @@
     * 12.1 [The CHECK Mode](#the-check-mode)
         * 12.1.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Mode.CHECK](#rqtestflowssnapshotsfunctionsnapshotmodecheck)
     * 12.2 [The UPDATE Mode](#the-update-mode)
-        * 12.2.1 [RQ.TestFlows.Snapshots.Function.Modes.UPDATE](#rqtestflowssnapshotsfunctionmodesupdate)
+        * 12.2.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Mode.UPDATE](#rqtestflowssnapshotsfunctionsnapshotmodeupdate)
     * 12.3 [The REWRITE Mode](#the-rewrite-mode)
-        * 12.3.1 [RQ.TestFlows.Snapshots.Function.Modes.REWRITE](#rqtestflowssnapshotsfunctionmodesrewrite)
+        * 12.3.1 [RQ.TestFlows.Snapshots.Function.Snapshot.Mode.REWRITE](#rqtestflowssnapshotsfunctionsnapshotmoderewrite)
 * 13 [Storage Formats](#storage-formats)
     * 13.1 [Python Module File (Version 1)](#python-module-file-version-1)
         * 13.1.1 [RQ.TestFlows.Snapshots.Version1](#rqtestflowssnapshotsversion1)
@@ -39,7 +39,8 @@
 
 ## Introduction
 
-Snapshot testing is a practical approach to recording the behavior of software systems under test.
+Snapshot testing is an approach to recording the behavior of software systems and later using the stored behavior
+as the expected results of the tests.
 
 In many cases, the exact behavior might be unknown, the test oracle problem, or hard to determine,
 however changes in behavior between different executions or versions might not be expected and therefore comparing
@@ -50,8 +51,11 @@ behavior between runs, software version, or even different software implementati
 ### RQ.TestFlows.Snapshots
 version: 1.0
 
-The `snapshots` module SHALL implement functionality that supports snapshot-testing
-by storing results of the observed behavior and comparing bahavior to the stored values.
+The `snapshots` module SHALL implement functionality that supports snapshot based testing
+by storing results of the observed behavior and comparing behavior to the stored values.
+
+It SHALL be a sub-package of the `testflows` package and the full name of
+the module SHALL be `testflows.snapshots`.
 
 ## Installing and Uninstalling
 
@@ -64,6 +68,7 @@ The `snapshots` module SHALL support to be installed and uninstalled using the `
 pip install testflows.snapshots
 pip uninstall testflows.snapshots
 ```
+
 
 ## The snapshot Function
 
@@ -97,7 +102,7 @@ version: 1.0
 The value that SHALL be stored or compared against the snapshot
 SHALL be specified using the `value` argument of the `snapshot()` function.
 The `value` can be of any type that can be encoded by the `encoder`
-or the `ValueError` exception SHALL be raise if the `value` can't be encoded.
+or the `ValueError` exception SHALL be raised if the `value` can't be encoded.
 
 The `value` argument SHALL be the first argument of the `snapshot()` function
 and the only argument that SHALL be expected to be specified by the user by its position.
@@ -111,7 +116,7 @@ snapshot("my value", encoder=str)
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Id
 version: 1.0
 
-The unique idenfier SHALL be specified using the `id` argument of the `snapshot()` function.
+The unique identifier SHALL be specified using the `id` argument of the `snapshot()` function.
 
 Different values of the `id` argument SHALL cause the `snapshot()` function
 to store values uniquely for the exact same caller source code file
@@ -152,7 +157,7 @@ snapshot("my value", path="./custom-path")
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Name
 version: 1.0
 
-Multiple values SHALL stored in the snapshot if unique value name is epcified using the `name` argument of the `snapshot()` function.
+Multiple values SHALL be stored in the snapshot if the unique value name is specified using the `name` argument of the `snapshot()` function.
 
 ```python
 snapshot("my value", name="v1")
@@ -164,7 +169,7 @@ snapshot("my value", name="v2")
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Encoder
 version: 1.0
 
-The encoder used to conver value into its stored representation SHALL be specified using the `encoder`
+The encoder used to convert value into its stored representation SHALL be specified using the `encoder`
 argument of the `snapshot()` function.
 
 The default encoder SHALL be `repr`.
@@ -178,7 +183,7 @@ snapshot(my_object, encoder=str)
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Comment
 version: 1.0
 
-Adding custom comment for the stored value inside the snapshot SHALL be deprecated
+Adding custom comment for the stored value inside the snapshot SHALL be deprecated,
 and any value passed to the `comment` argument in the `sanpshot()` function SHALL be ignored.
 
 ```python
@@ -204,7 +209,7 @@ snapshot("expected value", mode=snapshot.CHECK)
 
 ### The UPDATE Mode
 
-#### RQ.TestFlows.Snapshots.Function.Modes.UPDATE
+#### RQ.TestFlows.Snapshots.Function.Snapshot.Mode.UPDATE
 version: 1.0
 
 The `UPDATE` mode SHALL be specified using the `mode` argument of the `snapshot()` function
@@ -222,10 +227,10 @@ snapshot("expected value", mode=snapshot.UPDATE)
 
 ### The REWRITE Mode
 
-#### RQ.TestFlows.Snapshots.Function.Modes.REWRITE
+#### RQ.TestFlows.Snapshots.Function.Snapshot.Mode.REWRITE
 version: 1.0
 
-The `REWRITE` mode SHALL be specified using the the `mode` argument of the `snapshot()` function
+The `REWRITE` mode SHALL be specified using the `mode` argument of the `snapshot()` function
 and SHALL cause the function to rewrite all the values in the snapshot
 in a fixed order if and only if the stored value is missing and the new value was added to the snapshot.
 
