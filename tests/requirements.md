@@ -49,10 +49,11 @@ implementations is helpful.
 ### RQ.TestFlows.Snapshots
 version: 1.0
 
-The `snapshots` module SHALL implement functionality that supports snapshot based testing
-by storing results of the observed behavior and comparing behavior to the stored values.
+The `snapshots` module SHALL provide support for snapshot-based testing
+by storing results of the observed behavior and later comparing the observed behavior
+to the stored values.
 
-It SHALL be a sub-package of the `testflows` package and the full name of
+The `snapshots` module SHALL be a sub-package of the `testflows` package and the full name of
 the module SHALL be `testflows.snapshots`.
 
 ## Installing and Uninstalling
@@ -60,7 +61,7 @@ the module SHALL be `testflows.snapshots`.
 ### RQ.TestFlows.Snapshots.InstallingAndUninstalling
 version: 1.0
 
-The `snapshots` module SHALL support to be installed and uninstalled using the `pip` Python package manager.
+The `snapshots` module SHALL be installed and uninstalled using the `pip` Python package manager.
 
 ```
 pip install testflows.snapshots
@@ -73,8 +74,8 @@ pip uninstall testflows.snapshots
 ### RQ.TestFlows.Snapshots.Function.Snapshot
 version: 1.0
 
-The `snapshots` module SHALL provide the `snapshot()` function that SHALL server
-as the main function provided by the module.
+The `snapshots` module SHALL provide the `snapshot()` function that SHALL be
+as the main user function provided by the module.
 
 The `snapshot()` function SHALL have the following definition.
 
@@ -97,13 +98,13 @@ def snapshot(
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Value
 version: 1.0
 
-The value that SHALL be stored or compared against the snapshot
+The value that is be stored or compared against the snapshot
 SHALL be specified using the `value` argument of the `snapshot()` function.
 The `value` can be of any type that can be encoded by the `encoder`
 or the `ValueError` exception SHALL be raised if the `value` can't be encoded.
 
 The `value` argument SHALL be the first argument of the `snapshot()` function
-and the only argument that SHALL be expected to be specified by the user by its position.
+and the only argument that SHALL be expected to be specified by the user using its position.
 
 ```python
 snapshot("my value", encoder=str)
@@ -142,7 +143,7 @@ snapshot("my value", encoder=json, output=lambda v: print(v))
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Path
 version: 1.0
 
-The storage path for the value snapshots SHALL be specified using the `path` argument of the `snapshot()` function.
+The directory where the snapshot is stored SHALL be specified using the `path` argument of the `snapshot()` function.
 
 The default `path` SHALL be `./snapshots`.
 
@@ -155,7 +156,7 @@ snapshot("my value", path="./custom-path")
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Name
 version: 1.0
 
-Multiple values SHALL be stored in the snapshot if the unique value name is specified using the `name` argument of the `snapshot()` function.
+Multiple values SHALL be stored in the snapshot if the unique name for the value is specified using the `name` argument of the `snapshot()` function.
 
 ```python
 snapshot("my value", name="v1")
@@ -196,10 +197,11 @@ snapshot("my value", comment="comment that will be ignored")
 version: 1.0
 
 The `CHECK` mode SHALL be specified using the `mode` argument of the `snapshot()` function
-and SHALL cause the function to raise `SnapshotError` exception
+and SHALL cause the function to raise the `SnapshotError` exception
 if the stored value does not match the expected `value`.
 
-The `CHECK` mode SHALL be set using the `snapshot.CHECK` flag. 
+The `CHECK` mode SHALL be set using the `snapshot.CHECK` flag that SHALL be allowed to be combined
+with the `snapshot.UPDATE` and `snapshot.REWRITE` flags. 
 
 ```python
 snapshot("expected value", mode=snapshot.CHECK)
@@ -211,13 +213,14 @@ snapshot("expected value", mode=snapshot.CHECK)
 version: 1.0
 
 The `UPDATE` mode SHALL be specified using the `mode` argument of the `snapshot()` function
-and SHALL cause the function to raise `SnapshotError` exception
+and SHALL cause the function to raise the `SnapshotError` exception
 if the stored value is missing and this mode is not set.
 
-If the stored value is missing and this mode is set then the `snapshot()` function
+If the stored value is missing and this mode flag is set, then the `snapshot()` function
 SHALL add the expected value to the snapshot and no exception SHALL be raised.
 
-The `UPDATE` mode SHALL be set using the `snapshot.UPDATE` flag. 
+The `UPDATE` mode SHALL be set using the `snapshot.UPDATE` flag that SHALL be allowed to be combined
+with the `snapshot.UPDATE` and `snapshot.REWRITE` flags.
 
 ```python
 snapshot("expected value", mode=snapshot.UPDATE)
