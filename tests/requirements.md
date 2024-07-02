@@ -201,7 +201,7 @@ and SHALL cause the function to raise the `SnapshotError` exception
 if the stored value does not match the expected `value`.
 
 The `CHECK` mode SHALL be set using the `snapshot.CHECK` flag that SHALL be allowed to be combined
-with the `snapshot.UPDATE` and `snapshot.REWRITE` flags. 
+with other mode flags. 
 
 ```python
 snapshot("expected value", mode=snapshot.CHECK)
@@ -220,7 +220,7 @@ If the stored value is missing and this mode flag is set, then the `snapshot()` 
 SHALL add the expected value to the snapshot and no exception SHALL be raised.
 
 The `UPDATE` mode SHALL be set using the `snapshot.UPDATE` flag that SHALL be allowed to be combined
-with the `snapshot.UPDATE` and `snapshot.REWRITE` flags.
+with other mode flags.
 
 ```python
 snapshot("expected value", mode=snapshot.UPDATE)
@@ -234,6 +234,9 @@ version: 1.0
 The `REWRITE` mode SHALL be specified using the `mode` argument of the `snapshot()` function
 and SHALL cause the function to rewrite all the values in the snapshot
 in a fixed order if and only if the stored value is missing and the new value was added to the snapshot.
+
+The `REWRITE` mode SHALL be set using the `snapshot.REWRITE` flag that SHALL be allowed to be combined
+with other mode flags.
 
 ```python
 snapshot("expected value", mode=snapshot.REWRITE)
@@ -249,10 +252,10 @@ version: 1.0
 The `snapshot` module SHALL support storing snapshots as a Python module file
 by specifying the `version` argument of the `snapshot()` function.
 
-The Python module file format SHALL be specified as `snapshot.VERSION_V1` and
+The Python module file format SHALL be specified using the `snapshot.VERSION_V1` value and
 SHALL be the default format.
 
-The `snapshot.VERSION_V1` SHALL be equal to integer value of `1`.
+The `snapshot.VERSION_V1` SHALL be equal to the integer value of `1`.
 
 ```python
 snapshot("my value", version=snapshot.VERSION_V1)
@@ -268,10 +271,10 @@ by specifying the `version` argument of the `snapshot()` function.
 
 The JSON lines format SHALL store each value as JSON object on its own line.
 
-The JSON lines file format SHALL be specified as `snapshot.VERSION_V2` and
-must be specified explicitly.
+The JSON lines file format SHALL be specified using the `snapshot.VERSION_V2` value and
+SHALL be specified explicitly.
 
-The `snapshot.VERSION_V2` SHALL be equal to integer value of `2`.
+The `snapshot.VERSION_V2` SHALL be equal to the integer value of `2`.
 
 ```python
 snapshot("my value", version=snapshot.VERSION_V2)
