@@ -16,3 +16,9 @@ class SnapshotError:
     """Base class for all snapshot errors."""
 
     pass
+
+
+class SnapshotNotFoundError(SnapshotError):
+    """Base cass for all snapshot not found errors."""
+
+    pass

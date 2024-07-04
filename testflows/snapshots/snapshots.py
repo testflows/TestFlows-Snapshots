@@ -16,6 +16,7 @@ import os
 import inspect
 
 from .mode import *
+from .errors import *
 from .v1 import snapshot as snapshot_v1
 
 __all__ = ["snapshot"]

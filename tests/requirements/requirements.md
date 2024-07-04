@@ -68,7 +68,6 @@ pip install testflows.snapshots
 pip uninstall testflows.snapshots
 ```
 
-
 ## The snapshot Function
 
 ### RQ.TestFlows.Snapshots.Function.Snapshot
@@ -98,8 +97,9 @@ def snapshot(
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Value
 version: 1.0
 
-The value that is be stored or compared against the snapshot
+The value that is being stored or compared against the snapshot
 SHALL be specified using the `value` argument of the `snapshot()` function.
+
 The `value` can be of any type that can be encoded by the `encoder`
 or the `ValueError` exception SHALL be raised if the `value` can't be encoded.
 

@@ -14,17 +14,33 @@
 # limitations under the License.
 import re
 import os
+import sys
 import textwrap
 import hashlib
 import difflib
+import importlib.util
 
 from importlib.machinery import SourceFileLoader
 
 from .errors import SnapshotError as SnapshotErrorBase
+from .errors import SnapshotNotFoundError as SnapshotNotFoundErrorBase
 from .parallel import RWLock
 from .mode import *
 
 lock = RWLock()
+
+
+def import_module_by_path(name, path):
+    """Import Python module using the path to the source file."""
+
+    spec = importlib.util.spec_from_loader(name, SourceFileLoader(name, path))
+    if not spec:
+        raise ImportError(f"failed to import module: {name} from {path}")
+    module = spec.loader.load_module()
+    assert (
+        module.__name__ in sys.modules
+    ), f"module {module.__name__} not in sys.modules"
+    return module
 
 
 class SnapshotError(SnapshotErrorBase):
@@ -60,6 +76,25 @@ class SnapshotError(SnapshotErrorBase):
             ),
             " " * 4,
         )
+        r += '\n""")'
+        return r
+
+
+class SnapshotNotFoundError(SnapshotNotFoundErrorBase):
+    def __init__(self, filename, name, actual_value):
+        self.actual_value = actual_value
+        self.filename = str(filename)
+        self.name = str(name)
+
+    def __bool__(self):
+        return False
+
+    def __repr__(self):
+        r = "SnapshotNotFoundError("
+        r += "\nfilename=" + self.filename
+        r += "\nname=" + self.name
+        r += '\nactual_value="""\n'
+        r += textwrap.indent(self.actual_value, " " * 4)
         r += '\n""")'
         return r
 
@@ -102,7 +137,7 @@ def rewrite_snapshot(filename):
     module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
 
     with lock.write():
-        snapshot_module = SourceFileLoader(module_name, filename).load_module()
+        snapshot_module = import_module_by_path(module_name, filename)
 
         with open(filename, "w") as fd:
             for name in dir(snapshot_module):
@@ -127,7 +162,7 @@ def snapshot(
     if os.path.exists(filename):
         module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
         with lock.read():
-            snapshot_module = SourceFileLoader(module_name, filename).load_module()
+            snapshot_module = import_module_by_path(module_name, filename)
 
             if hasattr(snapshot_module, name):
                 snapshot_value = getattr(snapshot_module, name)
@@ -138,7 +173,7 @@ def snapshot(
                     return True
 
     if not (mode & SNAPSHOT_MODE_UPDATE):
-        return SnapshotError(filename, name, "", repr_value)
+        return SnapshotNotFoundError(filename, name, repr_value)
 
     # write or update snapshot entry
     with open(filename, "a") as fd:
