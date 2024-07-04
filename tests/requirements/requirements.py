@@ -1,6 +1,6 @@
 # These requirements were auto generated
 # from software requirements specification (SRS)
-# document by TestFlows v2.0.240627.1230945.
+# document by TestFlows v2.0.240703.1144231.
 # Do not edit by hand but re-generate instead
 # using 'tfs requirements generate' command.
 from testflows.core import Specification
@@ -43,7 +43,6 @@ RQ_TestFlows_Snapshots_InstallingAndUninstalling = Requirement(
         "pip install testflows.snapshots\n"
         "pip uninstall testflows.snapshots\n"
         "```\n"
-        "\n"
         "\n"
     ),
     link=None,
@@ -92,8 +91,9 @@ RQ_TestFlows_Snapshots_Function_Snapshot_Value = Requirement(
     type=None,
     uid=None,
     description=(
-        "The value that is be stored or compared against the snapshot\n"
+        "The value that is being stored or compared against the snapshot\n"
         "SHALL be specified using the `value` argument of the `snapshot()` function.\n"
+        "\n"
         "The `value` can be of any type that can be encoded by the `encoder`\n"
         "or the `ValueError` exception SHALL be raised if the `value` can't be encoded.\n"
         "\n"
@@ -546,7 +546,6 @@ pip install testflows.snapshots
 pip uninstall testflows.snapshots
 ```
 
-
 ## The snapshot Function
 
 ### RQ.TestFlows.Snapshots.Function.Snapshot
@@ -576,8 +575,9 @@ def snapshot(
 ### RQ.TestFlows.Snapshots.Function.Snapshot.Value
 version: 1.0
 
-The value that is be stored or compared against the snapshot
+The value that is being stored or compared against the snapshot
 SHALL be specified using the `value` argument of the `snapshot()` function.
+
 The `value` can be of any type that can be encoded by the `encoder`
 or the `ValueError` exception SHALL be raised if the `value` can't be encoded.
 
