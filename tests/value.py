@@ -1,10 +1,7 @@
 import json
-
 from testflows.core import *
 from testflows.asserts import error, raises
-
 from testflows.snapshots import snapshot
-
 from requirements import *
 
 import actions.python
@@ -83,7 +80,7 @@ def unsupported_type(self):
 @Requirements(RQ_TestFlows_Snapshots_Function_Snapshot_Value("1.0"))
 @Name("value")
 def feature(self):
-    """Check value argument."""
+    """Check snapshot value."""
 
     for scenario in loads(current_module(), Scenario):
         scenario()

@@ -62,6 +62,7 @@ def snapshot(
     comment=None,
     mode=SNAPSHOT_MODE_CHECK | SNAPSHOT_MODE_UPDATE,
     version=snapshot_v1.VERSION,
+    frame=None,
 ):
     """Compare value representation to a stored snapshot.
 
@@ -80,8 +81,11 @@ def snapshot(
     :param encoder: custom snapshot encoder, default: `repr`
     :param comment: (deprecated)
     :param mode: mode of operation: CHECK, UPDATE, REWRITE, default: CHECK | UPDATE
+    :param version: snapshot version, default: snapshot_v1.VERSION
+    :param frame: caller frame, default: `None`
     """
-    frame = inspect.currentframe().f_back
+    if frame is None:
+        frame = inspect.currentframe().f_back
 
     try:
         repr_value = encoder(value)

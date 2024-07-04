@@ -9,3 +9,4 @@ def feature(self):
     """Check snapshot() function."""
 
     Feature(run=load("value", "feature"))
+    Feature(run=load("mode", "feature"))
