@@ -6,6 +6,7 @@ from requirements import *
 import actions.snapshot
 import actions.python
 import actions.values
+import actions.model
 
 
 @TestSketch
@@ -18,12 +19,15 @@ def check_combinations(self, number_of_actions):
     modes = actions.values.modes()
     names = ["name1", "name2"]
 
+    self.context.behavior = []
+    model = actions.model.Model()
+
     with Given("unique snapshot file"):
         id = define("id", actions.snapshot.get_unique_id(frame=frame))
 
     for i in range(number_of_actions):
         actions.snapshot.check(
-            expect=lambda exc, result: note(f"{exc} {result}"),
+            expect=model.expect,
             value=either(*values, i=f"value-{i}"),
             encoder=either(*encoders, i=f"encoder-{i}"),
             mode=either(*modes, i=f"mode-{i}"),

@@ -161,9 +161,11 @@ def snapshot(
 
     if os.path.exists(filename):
         module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
-        with lock.read():
+
+        with lock.write():
             snapshot_module = import_module_by_path(module_name, filename)
 
+        with lock.read():
             if hasattr(snapshot_module, name):
                 snapshot_value = getattr(snapshot_module, name)
                 if not (snapshot_value == repr_value):

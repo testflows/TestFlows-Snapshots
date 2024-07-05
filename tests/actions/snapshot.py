@@ -8,6 +8,8 @@ from testflows.snapshots import snapshot
 from testflows.snapshots.errors import SnapshotError
 from testflows.snapshots.snapshots import get_snapshot_filename
 
+import actions.model
+
 
 @TestStep(Given)
 def get_unique_id(self, frame=None, path=None):
@@ -34,6 +36,11 @@ def get_unique_id(self, frame=None, path=None):
 def check(self, expect, **kwargs):
     """Call snapshot with the provided arguments and check the expected result."""
     exc, result = None, None
+
+    if not "frame" in kwargs:
+        kwargs["frame"] = inspect.currentframe()
+
+    self.context.behavior.append(actions.model.State(**kwargs))
 
     try:
         result = snapshot(**kwargs)
