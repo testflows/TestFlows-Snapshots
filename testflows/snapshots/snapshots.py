@@ -16,6 +16,7 @@ import os
 import inspect
 
 from .mode import *
+from .compare import Compare
 from .errors import *
 from .v1 import snapshot as snapshot_v1
 
@@ -63,6 +64,7 @@ def snapshot(
     mode=SNAPSHOT_MODE_CHECK | SNAPSHOT_MODE_UPDATE,
     version=snapshot_v1.VERSION,
     frame=None,
+    compare=Compare.eq,
 ):
     """Compare value representation to a stored snapshot.
 
@@ -83,6 +85,7 @@ def snapshot(
     :param mode: mode of operation: CHECK, UPDATE, REWRITE, default: CHECK | UPDATE
     :param version: snapshot version, default: snapshot_v1.VERSION
     :param frame: caller frame, default: `None`
+    :param compare: custom comparison function, default: equals
     """
     if frame is None:
         frame = inspect.currentframe().f_back
@@ -99,7 +102,11 @@ def snapshot(
 
     if version == snapshot_v1.VERSION:
         return snapshot_v1(
-            filename=filename, repr_value=repr_value, name=name, mode=mode
+            filename=filename,
+            repr_value=repr_value,
+            name=name,
+            mode=mode,
+            compare=compare,
         )
 
     raise ValueError(f"unsupported snapshot version: {version}")
@@ -109,6 +116,9 @@ def snapshot(
 snapshot.CHECK = SNAPSHOT_MODE_CHECK
 snapshot.UPDATE = SNAPSHOT_MODE_UPDATE
 snapshot.REWRITE = SNAPSHOT_MODE_REWRITE
+
+# define comparison functions
+snapshot.COMPARE = Compare
 
 # define supported versions
 snapshot.VERSION_V1 = snapshot_v1.VERSION

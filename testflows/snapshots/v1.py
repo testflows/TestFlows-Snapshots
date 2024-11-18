@@ -26,6 +26,7 @@ from .errors import SnapshotError as SnapshotErrorBase
 from .errors import SnapshotNotFoundError as SnapshotNotFoundErrorBase
 from .parallel import RWLock
 from .mode import *
+from .compare import Compare
 
 locks = {}
 
@@ -163,6 +164,7 @@ def snapshot(
     repr_value,
     name="snapshot",
     mode=SNAPSHOT_MODE_CHECK | SNAPSHOT_MODE_UPDATE,
+    compare=Compare.eq,
 ):
     """Check representation of the value against a snapshot value
     stored in a Python module.
@@ -180,7 +182,7 @@ def snapshot(
         with lock.read():
             if hasattr(snapshot_module, name):
                 snapshot_value = getattr(snapshot_module, name)
-                if not (snapshot_value == repr_value):
+                if not (compare(snapshot_value, repr_value)):
                     if mode & SNAPSHOT_MODE_CHECK:
                         return SnapshotError(filename, name, snapshot_value, repr_value)
                 else:
