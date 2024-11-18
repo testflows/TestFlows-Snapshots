@@ -46,10 +46,10 @@ class Compare:
         return operator.contains(a, b)
 
     @staticmethod
-    def resub(pattern, value="", op=operator.eq):
+    def resub(pattern, sub="", op=operator.eq):
         """Compare after applying regular expression substitution."""
         pattern = re.compile(pattern)
-        return lambda a, b: op(pattern.sub(value, a), pattern.sub(value, b))
+        return lambda a, b: op(pattern.sub(sub, a), pattern.sub(sub, b))
 
     @staticmethod
     def rematch(pattern, strip_single_quotes=True):

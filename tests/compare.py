@@ -121,7 +121,7 @@ def compare_resub(self):
             value=f"hello 555.333",
             ok_value="hello 222.333",
             fail_value="hello2 222.333",
-            compare=snapshot.COMPARE.resub(r"\d+(\.\d+)?", "d"),
+            compare=snapshot.COMPARE.resub(r"\d+(\.\d+)?", sub="d"),
         )
 
 
