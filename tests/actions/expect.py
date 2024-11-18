@@ -4,8 +4,9 @@ from testflows.snapshots.errors import SnapshotError, SnapshotNotFoundError
 
 
 @TestStep(Then)
-def expect_value_error(self, exc, result):
+def expect_value_error(self, exc, result=None):
     """Check that ValueError was raised."""
+    assert result is None, f"unexpected result {result}"
     assert isinstance(
         exc, ValueError
     ), f"expected ValueError, got {exc} and {result} result"
@@ -14,6 +15,7 @@ def expect_value_error(self, exc, result):
 @TestStep(Then)
 def expect_file_not_found_error(self, exc, result=None):
     """Check that FileNotFoundError was raised."""
+    assert result is None, f"unexpected result {result}"
     assert isinstance(
         exc, FileNotFoundError
     ), f"expected FileNotFoundError, got {exc} and {result} result"

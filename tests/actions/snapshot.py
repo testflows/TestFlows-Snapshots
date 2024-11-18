@@ -44,7 +44,7 @@ def check(self, expect, **kwargs):
 
     try:
         result = snapshot(**kwargs)
-    except SnapshotError as e:
+    except Exception as e:
         exc = e
 
     expect(exc=exc, result=result)

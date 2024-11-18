@@ -27,7 +27,13 @@ from .errors import SnapshotNotFoundError as SnapshotNotFoundErrorBase
 from .parallel import RWLock
 from .mode import *
 
-lock = RWLock()
+locks = {}
+
+
+def get_lock(filename):
+    if filename not in locks:
+        locks[filename] = RWLock()
+    return locks[filename]
 
 
 def import_module_by_path(name, path):
@@ -115,6 +121,8 @@ def write_to_snapshot(fd, name, repr_value, lock_protected=True):
     """Write entry to snapshot file object."""
     repr_value = repr_value.replace('"""', '""" + \'"""\' + r"""')
 
+    lock = get_lock(fd.name)
+
     if lock_protected:
         lock.writer_acquire()
     try:
@@ -135,6 +143,8 @@ def rewrite_snapshot(filename):
         raise FileNotFoundError(f"does not exist: {filename}")
 
     module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
+
+    lock = get_lock(filename)
 
     with lock.write():
         snapshot_module = import_module_by_path(module_name, filename)
@@ -158,6 +168,8 @@ def snapshot(
     stored in a Python module.
     """
     name = varname(name) if name != "snapshot" else name
+
+    lock = get_lock(filename)
 
     if os.path.exists(filename):
         module_name = f"snapshot_{hashlib.sha1(os.path.abspath(filename).encode('utf-8')).hexdigest()}"
