@@ -11,20 +11,17 @@ key_name_of_the_entry = r"""value that represents the state of the system."""
 ```
 
 ### How snapshots work?
-When you execute your test program for the first time, a snapshot file is generated. This file captures and stores the values representing the system's state at that moment. During subsequent test executions, the actual values from the system are compared against those stored in the snapshot file.
+When you execute your test program a snapshot file is generated if it doesn't exist. This file captures and stores the values representing the system's state at that moment. During subsequent test executions, the actual values from the system are compared against those stored in the snapshot file.
 If any discrepancies are found between the stored values and the actual output, an assertion error is raised. This error highlights that the expected output differs from the current state of the system, enabling you to detect regressions or unexpected changes effectively.
 
 Here is an example of a snapshot file content:
 
 ```python
-SNAPPY_BINARY_UTF8_optional_1_0_toString = r"""'{rows_read: 100}, initial_rows: 1500, file_structure: utf8\tNullable(String), condition: WHERE utf8 = toString(value)'"""
-
-SNAPPY_BINARY_UTF8_optional_1_0_toStringCutToZero = r"""'{rows_read: 100}, initial_rows: 1500, file_structure: utf8\tNullable(String), condition: WHERE utf8 = toStringCutToZero(value)'"""
-
-SNAPPY_BINARY_UTF8_optional_1_0_reinterpretAsString = r"""'{rows_read: 100}, initial_rows: 1500, file_structure: utf8\tNullable(String), condition: WHERE utf8 = reinterpretAsString(value)'"""
-
-SNAPPY_BINARY_UTF8_optional_1_0_toLowCardinality = r"""'{rows_read: 100}, initial_rows: 1500, file_structure: utf8\tNullable(String), condition: WHERE utf8 = toLowCardinality(value)'"""
+greeting_message = r"""Hello, world!"""
+status_code = r"""200"""
+timestamp = r"""2024-12-05 12:34:56"""
 ```
+
 ## How to use snapshots in TestFlows?
 
 To utilize snapshots, you need to import the snapshot function from the asserts module:
@@ -62,8 +59,8 @@ with values() as that:
 
 The default mode is `CHECK | UPDATE`, allowing the system to either validate or update the snapshot values automatically.
 
-> [!NOTE]
-> For your first run it is fine to use `snapshot.CHECK | snapshot.UPDATE` mode. After that you need to switch to `snapshot.CHECK` mode to ensure that you don't just overwrite the snapshot with the actual value.
+> [!WARNING]
+> For your first run it is fine to use `snapshot.CHECK | snapshot.UPDATE` mode. After that you need to switch to `snapshot.CHECK` mode to ensure that you don't just overwrite the expected values in the snapshot with the actual values.
 
 ### Custom Comparison
 
@@ -83,7 +80,7 @@ snapshot(
 
 In this case:
 
-- The dynamic numeric portion (e.g., timestamps) is removed from both the snapshot and actual value using `re.sub`.
+- The dynamic numeric portion (e.g., timestamps) is removed from both the snapshot and actual value using `resub`.
 - The remaining static portions are compared for equality.
 
 #### Regex Match for Comparison
