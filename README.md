@@ -42,7 +42,7 @@ with values() as that:
             value=system_output,
             name=snapshot_name,
             id=snapshot_id,
-            mode=snapshot_mode,
+            mode=snapshot.CHECK,
         )
     ), error()
 ```
@@ -62,3 +62,56 @@ with values() as that:
   - `REWRITE:` Rewrites the snapshot file with new values.
 
 The default mode is `CHECK | UPDATE`, allowing the system to either validate or update the snapshot values automatically.
+
+### Custom Comparison
+
+The `testflows.snapshots` module offers the ability to specify custom comparison functions, providing flexibility for handling complex or dynamic use cases. Here are some interesting use cases:
+
+#### Regex Substitution for Snapshot and Actual Value
+
+You can use regular expression substitution to strip dynamic parts from both the snapshot and the actual value before performing the comparison. This ensures that only the static portions are validated.
+
+```python
+snapshot(
+    value=f"hello {time.time()}",
+    mode=snapshot.CHECK,
+    compare=snapshot.COMPARE.resub(r"\d+(\.\d+)?")
+)
+```
+
+In this case:
+
+- The dynamic numeric portion (e.g., timestamps) is removed from both the snapshot and actual value using `re.sub`.
+- The remaining static portions are compared for equality.
+
+#### Regex Match for Comparison
+
+Instead of checking for strict equality, you can use regular expression matching to validate both the snapshot and the actual value.
+
+```python
+snapshot(
+    value=f"hello {time.time()}",
+    mode=snapshot.CHECK,
+    compare=snapshot.COMPARE.rematch(r"hello.*")
+)
+```
+
+Here a regex pattern (e.g., hello.*) ensures that both values match a specified format or pattern rather than being exactly identical.
+
+
+#### Dynamic Evaluation
+
+You can dynamically evaluate the actual value at runtime and compare it without strictly relying on the snapshot value. This is useful for scenarios where the snapshot serves as a placeholder but the actual validation is context-sensitive.
+
+```python
+snapshot(
+    value=f"{time.time()}",
+    mode=snapshot.CHECK,
+    compare=lambda a, b: time.time() - 1 < float(b[1:-1]) < time.time() + 1
+)
+```
+
+In this scenario:
+
+- A lambda function dynamically checks if the actual value is within a specific range (e.g., within ±1 second of the current time).
+- The snapshot value is effectively bypassed for comparison, allowing fully dynamic validation.
