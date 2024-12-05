@@ -48,16 +48,13 @@ with values() as that:
 ```
 
 ### Parameters of the snapshot Function
-
-- `name`: The key name within the snapshot file. For example: 
-
-```python
-key_name_of_the_entry = r"""value that represents the state of the system."""
-```
-
-In this case, `key_name_of_the_entry` is the `name`.
-
 - `value:` The actual value from the system that you want to store in the snapshot.
+- `name`: The key name within the snapshot file. For example:
+
+  ```python
+  key_name_of_the_entry = r"""value that represents the state of the system."""
+  ```
+
 - `id:` Defines the name of the snapshot file itself, helping to distinguish between different snapshot files.
 - `mode:` Determines the operation mode of the snapshot function. Modes include:
   - `CHECK:` Compares the actual value against the expected value stored in the snapshot.
