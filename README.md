@@ -36,25 +36,24 @@ from testflows.asserts import snapshot
 Here’s an example of how to use the snapshot function in a test:
 
 ```python
+from testflows.asserts import snapshot
+
+system_output = "Hello, world!"
+
 with values() as that:
     assert that(
         snapshot(
             value=system_output,
             name=snapshot_name,
             id=snapshot_id,
-            mode=snapshot.CHECK,
+            mode=snapshot.CHECK | snapshot.UPDATE,
         )
     ), error()
 ```
 
 ### Parameters of the snapshot Function
 - `value:` The actual value from the system that you want to store in the snapshot.
-- `name`: The key name within the snapshot file. For example:
-
-  ```python
-  key_name_of_the_entry = r"""value that represents the state of the system."""
-  ```
-
+- `name`: The key name within the snapshot file.
 - `id:` Defines the name of the snapshot file itself, helping to distinguish between different snapshot files.
 - `mode:` Determines the operation mode of the snapshot function. Modes include:
   - `CHECK:` Compares the actual value against the expected value stored in the snapshot.
@@ -62,6 +61,9 @@ with values() as that:
   - `REWRITE:` Rewrites the snapshot file with new values.
 
 The default mode is `CHECK | UPDATE`, allowing the system to either validate or update the snapshot values automatically.
+
+> [!NOTE]
+> For your first run it is fine to use `snapshot.CHECK | snapshot.UPDATE` mode. After that you need to switch to `snapshot.CHECK` mode to ensure that you don't just overwrite the snapshot with the actual value.
 
 ### Custom Comparison
 
