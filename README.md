@@ -3,18 +3,19 @@ TestFlows.com Open-Source Software Testing Framework's module for working with s
 
 ## What are snapshots?
 
-Snapshots are specialized files designed to capture and store the initial state of the system under test. 
-This allows you to identify any changes in the system's behavior during subsequent test runs. The state is saved as key-value pairs in the following format:
+Snapshots are specialized files designed to capture and previously recorded output of the system under test. 
+This allows you to identify any changes in the system's behavior during subsequent test runs (regression testing). The state is saved as key-value pairs in the following format:
 
 ```python
 key_name_of_the_entry = r"""value that represents the state of the system."""
 ```
 
 ### How snapshots work?
-When you execute your test program a snapshot file is generated if it doesn't exist. This file captures and stores the values representing the system's state at that moment. During subsequent test executions, the actual values from the system are compared against those stored in the snapshot file.
-If any discrepancies are found between the stored values and the actual output, an assertion error is raised. This error highlights that the expected output differs from the current state of the system, enabling you to detect regressions or unexpected changes effectively.
 
-Here is an example of a snapshot file content:
+When you execute your test program a snapshot file is generated if it doesn't exist. This file captures and stores the values representing the system's state at that moment. During subsequent test executions, the actual values from the system are compared against those stored in the snapshot file.
+If any discrepancies are found between the stored values and the actual output, an assertion error is raised. This error highlights that the expected output differs from the recorded output of the system, enabling you to detect regressions or unexpected changes effectively.
+
+Here is a example of a snapshot file content:
 
 ```python
 greeting_message = r"""Hello, world!"""
@@ -24,16 +25,17 @@ timestamp = r"""2024-12-05 12:34:56"""
 
 ## How to use snapshots in TestFlows?
 
-To utilize snapshots, you need to import the snapshot function from the asserts module:
+To utilize snapshots, you need to import the snapshot function from the `testflows.snapshots` module:
 
 ```python
-from testflows.asserts import snapshot
+from testflows.snapshots import snapshot
 ```
 
 Here’s an example of how to use the snapshot function in a test:
 
 ```python
-from testflows.asserts import snapshot
+from testflows.asserts import values, error
+from testflows.snapshots import snapshot
 
 system_output = "Hello, world!"
 
@@ -49,6 +51,7 @@ with values() as that:
 ```
 
 ### Parameters of the snapshot Function
+
 - `value:` The actual value from the system that you want to store in the snapshot.
 - `name`: The key name within the snapshot file.
 - `id:` Defines the name of the snapshot file itself, helping to distinguish between different snapshot files.
